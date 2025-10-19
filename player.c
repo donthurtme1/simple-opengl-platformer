@@ -5,24 +5,40 @@ void player_input(enum PlayerInput key, bool key_down) {
 	if (key & (INKEY_UP|INKEY_LEFT|INKEY_DOWN|INKEY_RIGHT)) {
 		if (key_down) {
 			player.key_bitmask |= key;
-			if (key == INKEY_UP)
-				player.y_input = 1;
-			else if (key == INKEY_LEFT)
-				player.x_input = -1;
-			else if (key == INKEY_DOWN)
-				player.y_input = -1;
-			else if (key == INKEY_RIGHT)
-				player.x_input = 1;
+			if (key & (INKEY_UP|INKEY_DOWN)) {
+				if (key == INKEY_UP)
+					player.y_input = 1;
+				else 
+					player.y_input = -1;
+			} else {
+				if (key == INKEY_LEFT)
+					player.x_input = -1;
+				else
+					player.x_input = 1;
+			}
 		} else {
 			player.key_bitmask &= ~key;
-			if (player.key_bitmask == INKEY_UP)
-				player.y_input = 1;
-			if (player.key_bitmask == INKEY_LEFT)
-				player.x_input = -1;
-			if (player.key_bitmask == INKEY_DOWN)
-				player.y_input = -1;
-			if (player.key_bitmask == INKEY_RIGHT)
-				player.x_input = 1;
+			if (key == INKEY_UP) {
+				if (player.key_bitmask & INKEY_DOWN)
+					player.y_input = -1;
+				else
+					player.y_input = 0;
+			} else if (key == INKEY_LEFT) {
+				if (player.key_bitmask & INKEY_RIGHT)
+					player.x_input = 1;
+				else
+					player.x_input = 0;
+			} else if (key == INKEY_DOWN) {
+				if (player.key_bitmask & INKEY_UP)
+					player.y_input = 1;
+				else
+					player.y_input = 0;
+			} else if (key == INKEY_RIGHT) {
+				if (player.key_bitmask & INKEY_LEFT)
+					player.x_input = -1;
+				else
+					player.x_input = 0;
+			}
 		}
 	}
 }

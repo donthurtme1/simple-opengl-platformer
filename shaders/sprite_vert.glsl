@@ -22,7 +22,7 @@ layout(binding=1) uniform View {
 
 void main() {
 	gl_Position = vec4(
-			(varray[gl_VertexID].x / 100) + (float(pos_x) / 1000),
-			(varray[gl_VertexID].y / 100) + (float(pos_y) / 1000),
+			(varray[gl_VertexID].x / 100) + (float(pos_x) / 200),
+			(varray[gl_VertexID].y / 100) + (float(pos_y) / 200),
 			0, 1);
 }
