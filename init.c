@@ -92,7 +92,7 @@ int createprogram
 
 /* Initialise renderer.
  * Returns 0 on success and -1 otherwise */
-int init_all() {
+int init_graphics() {
 	/* Set SDL3 OpenGL attributes */
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
@@ -136,7 +136,7 @@ int init_all() {
 
 
 	/* Create and initialise uniform buffers */
-	glGenBuffers(sizeof(gl.uniform_buffer), gl.uniform_buffer);
+	glGenBuffers(LEN(gl.uniform_buffer), gl.uniform_buffer);
 	glBindBufferBase(GL_UNIFORM_BUFFER, PLAYER_UBUF_IDX,
 			gl.uniform_buffer[PLAYER_UBUF_IDX]);
 	glBindBufferBase(GL_UNIFORM_BUFFER, VIEW_UBUF_IDX,
@@ -155,14 +155,23 @@ int init_all() {
 	};
 	//unsigned int vbuf;
 	//glGenBuffers(1, &vbuf);
-
 	glGenVertexArrays(1, &gl.array);
 	glBindVertexArray(gl.array);
-
 	//glBindBuffer(GL_ARRAY_BUFFER, vbuf);
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
 	//glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float[2]), 0);
 	//glEnableVertexAttribArray(0);
+	return 0;
+}
+
+/* Initialise all subsystems */
+int init_all() {
+	int res;
+	res = init_graphics();
+	if (res == -1) {
+		fprintf(stderr, "Failed to initialise graphics\n");
+		return -1;
+	}
 
 	return 0;
 }

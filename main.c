@@ -8,8 +8,9 @@
 #include "global.h"
 
 extern int init_all(void);
-extern void move_player(int, int);
+extern void move_player(int x, int y);
 extern void update_player(void);
+extern void player_input(enum PlayerInput key, bool key_down);
 
 int main(void) {
 	int res = init_all();
@@ -27,18 +28,26 @@ int main(void) {
 				return 0;
 			else if (event.type == SDL_EVENT_KEY_DOWN) {
 				switch (event.key.key) {
-					case SDLK_A: move_player( 0, 1); break;
-					case SDLK_S: move_player(-1, 0); break;
-					case SDLK_D: move_player( 0,-1); break;
-					case SDLK_F: move_player( 1, 0); break;
+					case SDLK_A: player_input(INKEY_UP, 1);
+								 break;
+					case SDLK_S: player_input(INKEY_LEFT, 1);
+								 break;
+					case SDLK_D: player_input(INKEY_DOWN, 1);
+								 break;
+					case SDLK_F: player_input(INKEY_RIGHT, 1);
+								 break;
 				}
 			}
-			else if (event.type == SDL_EVENT_KEY_DOWN) {
+			else if (event.type == SDL_EVENT_KEY_UP) {
 				switch (event.key.key) {
-					case SDLK_A: move_player(0, 0); break;
-					case SDLK_S: move_player(0, 0); break;
-					case SDLK_D: move_player(0, 0); break;
-					case SDLK_F: move_player(0, 0); break;
+					case SDLK_A: player_input(INKEY_UP, 0);
+								 break;
+					case SDLK_S: player_input(INKEY_LEFT, 0);
+								 break;
+					case SDLK_D: player_input(INKEY_DOWN, 0);
+								 break;
+					case SDLK_F: player_input(INKEY_RIGHT, 0);
+								 break;
 				}
 			}
 		}

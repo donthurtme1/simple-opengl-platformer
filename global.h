@@ -3,6 +3,8 @@
 #ifndef _GLOBAL_H
 #define _GLOBAL_H
 
+#define LEN(array) (sizeof(array) / sizeof(array[0]))
+
 #include <SDL3/SDL.h>
 
 enum {
@@ -21,19 +23,20 @@ extern struct {
 extern struct {
 	int pos_x, pos_y;
 	int vel_x, vel_y;
-} player
-#ifdef _GLOBAL_C
-= { 0, 0, 0, 0 }
-#endif
-;
+	int accel_x, accel_y;
+
+	enum PlayerInput {
+		INKEY_UP	= 1 << 0,
+		INKEY_LEFT	= 1 << 1,
+		INKEY_DOWN	= 1 << 2,
+		INKEY_RIGHT	= 1 << 3,
+	} key_bitmask;
+	int x_input, y_input;
+} player;
 
 extern struct {
 	int centre_x, centre_y;
 	int width, height;
-} view
-#ifdef _GLOBAL_C
-= { 0, 0, 0, 0 }
-#endif
-;
+} view;
 
 #endif
