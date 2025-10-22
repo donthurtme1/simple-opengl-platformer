@@ -44,14 +44,14 @@ void player_input(enum PlayerInput key, bool key_down) {
 }
 
 void move_player(int x, int y) {
-	player.vel_x = x;
-	player.vel_y = y;
+	player.vel_x = x * 2;
+	player.vel_y = y * 2;
 }
 
 /* Called every frame, update player position, state, etc. */
 void update_player() {
-	player.vel_x = player.x_input;
-	player.vel_y = player.y_input;
+	player.vel_x = player.x_input * 20;
+	player.vel_y = player.y_input * 20;
 	player.pos_x += player.vel_x;
 	player.pos_y += player.vel_y;
 }

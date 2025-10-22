@@ -69,9 +69,14 @@ int main(void) {
 		view.height = h;
 
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
 		glUseProgram(gl.sprite_program);
-		glBindVertexArray(gl.array);
+		glBindVertexArray(gl.v_array);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+		glUseProgram(gl.tile_program);
+		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, 4);
+
 		SDL_GL_SwapWindow(gl.window);
 
 		/* Frame advance */

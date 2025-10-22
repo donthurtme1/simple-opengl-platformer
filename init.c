@@ -1,7 +1,9 @@
 #define GL_GLEXT_PROTOTYPES
+#define STB_IMAGE_IMPLEMENTATION
 #include <fcntl.h>
 #include <GL/glut.h>
 #include <SDL3/SDL.h>
+#include <stb/stb_image.h>
 #include <stdio.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
@@ -111,7 +113,7 @@ int init_graphics() {
 	int argc = 0;
 	char *argv[2] = {0, 0};
 	glutInit(&argc, argv);
-	glClearColor(0.0f, 0.0f, 0.12f, 1.0f);
+	glClearColor(0.4f, 0.73f, 0.8f, 1.0f);
 	glLineWidth(2.0f);
 	glCullFace(GL_BACK);
 	glDisable(GL_CULL_FACE);
@@ -129,11 +131,28 @@ int init_graphics() {
 
 	/* Create shader programs */
 	int res;
-	res = createprogram(&gl.sprite_program,
-			"sprite_vert.glsl", "sprite_frag.glsl");
-	if (res == -1)
-		return -1;
+	res = createprogram(&gl.sprite_program, "sprite_vert.glsl", "sprite_frag.glsl");
+	if (res == -1) return -1;
+	res = createprogram(&gl.tile_program, "tile_vert.glsl", "tile_frag.glsl");
+	if (res == -1) return -1;
 
+
+	/* Create textures */
+	int texw, texh, texch;
+	unsigned char *tex_data = stbi_load(
+			"/home/basil/c/games/platformer/sprite-sheets/tileset-atlas.png",
+			&texw, &texh, &texch, 0);
+	glGenTextures(1, &gl.tile_set);
+	glBindTexture(GL_TEXTURE_2D, gl.tile_set);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texw, texh, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, tex_data);
+	stbi_image_free(tex_data);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glGenerateMipmap(GL_TEXTURE_2D);
 
 	/* Create and initialise uniform buffers */
 	glGenBuffers(LEN(gl.uniform_buffer), gl.uniform_buffer);
@@ -147,20 +166,37 @@ int init_graphics() {
 	glNamedBufferData(gl.uniform_buffer[VIEW_UBUF_IDX],
 			sizeof(view), &view, GL_STATIC_DRAW);
 
-
-	float data[6] = {
-		-0.5f, -0.5f,
-		 0.5f, -0.5f,
-		 0.0f,  0.5f,
+	struct {
+		float xpos, ypos;
+		int rectw, recth;
+		int tileid;
+	} __attribute__((aligned(8))) level_data[] = {
+		{ -15.0f, -8.0f, 30, 2, 0 },
+		{ 1.0f, -3.0f, 6, 1, 1 },
+		{ -6.0f, -1.0f, 1, 1, 2 },
+		{ -6.0f, -6.0f, 1, 5, 3 },
 	};
-	//unsigned int vbuf;
-	//glGenBuffers(1, &vbuf);
-	glGenVertexArrays(1, &gl.array);
-	glBindVertexArray(gl.array);
-	//glBindBuffer(GL_ARRAY_BUFFER, vbuf);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
-	//glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float[2]), 0);
-	//glEnableVertexAttribArray(0);
+	glBindBufferBase(GL_UNIFORM_BUFFER, LEVEL_UBUF_IDX,
+			gl.uniform_buffer[LEVEL_UBUF_IDX]);
+	glNamedBufferData(gl.uniform_buffer[LEVEL_UBUF_IDX],
+			sizeof(level_data), level_data, GL_DYNAMIC_DRAW);
+
+
+	/* Create and initialise vertex array */
+	float vdata[8] = {
+		0, 0,
+		1, 0,
+		0, 1,
+		1, 1
+	};
+	glGenVertexArrays(1, &gl.v_array);
+	glBindVertexArray(gl.v_array);
+	glGenBuffers(1, &gl.v_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, gl.v_buffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vdata), vdata, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float[2]), 0);
+	glEnableVertexAttribArray(0);
+
 	return 0;
 }
 

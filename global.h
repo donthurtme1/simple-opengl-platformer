@@ -10,14 +10,22 @@
 enum {
 	PLAYER_UBUF_IDX,
 	VIEW_UBUF_IDX,
+	LEVEL_UBUF_IDX,
 };
 
 extern struct {
 	SDL_Window *window;
 	SDL_GLContext context;
+	/* Shader programs */
 	unsigned int sprite_program;
-	unsigned int array;
+	unsigned int tile_program;
+	/* Square vertex array and buffer */
+	unsigned int v_array;
+	unsigned int v_buffer; /* NOTE: currently this is unused */
+	/* Uniform buffers */
 	unsigned int uniform_buffer[4];
+	/* GL Textures */
+	unsigned int tile_set;
 } gl;
 
 extern struct {

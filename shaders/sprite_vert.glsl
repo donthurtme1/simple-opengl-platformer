@@ -1,13 +1,6 @@
 /* Sprite vertex shader */
 #version 460
 
-vec2 varray[4] = {
-	vec2(-1, -1),
-	vec2( 1, -1),
-	vec2(-1,  1),
-	vec2( 1,  1),
-};
-
 layout(location=0) in vec2 in_pos;
 
 /* Uniform bindings */
@@ -22,7 +15,7 @@ layout(binding=1) uniform View {
 
 void main() {
 	gl_Position = vec4(
-			(varray[gl_VertexID].x / 100) + (float(pos_x) / 200),
-			(varray[gl_VertexID].y / 100) + (float(pos_y) / 200),
+			(in_pos.x / 12) + (float(pos_x) / (12 * 16 * 16)),
+			(in_pos.y / 12) + (float(pos_y) / (12 * 16 * 16)),
 			0, 1);
 }
