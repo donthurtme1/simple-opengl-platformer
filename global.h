@@ -25,7 +25,8 @@ extern struct {
 	/* Uniform buffers */
 	unsigned int uniform_buffer[4];
 	/* GL Textures */
-	unsigned int tile_set;
+	unsigned int tile_atlas;
+	unsigned int sprite_atlas;
 } gl;
 
 extern struct {

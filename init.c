@@ -142,16 +142,25 @@ int init_graphics() {
 	unsigned char *tex_data = stbi_load(
 			"/home/basil/c/games/platformer/sprite-sheets/tileset-atlas.png",
 			&texw, &texh, &texch, 0);
-	glGenTextures(1, &gl.tile_set);
-	glBindTexture(GL_TEXTURE_2D, gl.tile_set);
+	glGenTextures(1, &gl.tile_atlas);
+	glBindTexture(GL_TEXTURE_2D, gl.tile_atlas);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texw, texh, 0,
 			GL_RGBA, GL_UNSIGNED_BYTE, tex_data);
 	stbi_image_free(tex_data);
-
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	tex_data = stbi_load(
+			"/home/basil/c/games/platformer/sprite-sheets/sprite-atlas.png",
+			&texw, &texh, &texch, 0);
+	glGenTextures(1, &gl.sprite_atlas);
+	glBindTexture(GL_TEXTURE_2D, gl.sprite_atlas);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texw, texh, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, tex_data);
+	stbi_image_free(tex_data);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	/* Create and initialise uniform buffers */
