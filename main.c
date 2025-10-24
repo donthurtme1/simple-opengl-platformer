@@ -72,10 +72,12 @@ int main(void) {
 
 		glUseProgram(gl.sprite_program);
 		glBindVertexArray(gl.v_array);
+		glBindTexture(GL_TEXTURE_2D, gl.sprite_atlas);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 		glUseProgram(gl.tile_program);
-		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, 4);
+		glBindTexture(GL_TEXTURE_2D, gl.tile_atlas);
+		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, 6);
 
 		SDL_GL_SwapWindow(gl.window);
 

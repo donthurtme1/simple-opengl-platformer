@@ -19,6 +19,11 @@ layout(location=1) out vec2 out_texcoord;
 layout(location=2) out vec2 out_texoffs;
 
 /* Uniform buffers */
+layout(binding=1) uniform View {
+	int centre_x, centre_y;
+	int width, height;
+};
+
 struct LevelNode {
 	vec2 pos;
 	ivec2 rect;
@@ -47,9 +52,10 @@ void main() {
 
 	out_colour = colours[level[gl_InstanceID].type];
 	gl_Position = vec4(
-			(varray[gl_VertexID].x / 12) + 
-			(level[gl_InstanceID].pos.x / 12),
-			(varray[gl_VertexID].y / 12) + 
-			(level[gl_InstanceID].pos.y / 12),
+			(varray[gl_VertexID].x / 8) + 
+			(level[gl_InstanceID].pos.x / 8),
+			(varray[gl_VertexID].y / 8) + 
+			(level[gl_InstanceID].pos.y / 8),
 			0, 1);
+	gl_Position.x *= (float(height) / width);
 }

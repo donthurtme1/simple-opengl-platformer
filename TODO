@@ -1,0 +1,27 @@
+END GOAL
+ - walk and jump
+ - 1 enemy type
+ - simple animations (2-3 frames)
+ - terrain with 4 tile types (including blank)
+ - single background layer
+
+TODO
+[ ] player
+	[x] render player
+	[x] move player
+	[ ] player texture and animation
+[ ] terrain
+	[x] draw terrain
+	[ ] player-terrain collision
+	[ ] load terrain
+[ ] controls
+	[ ] add player physics
+	[ ] add jump
+[ ] enemy
+	[ ] render enemy
+	[ ] deal damage to player
+	[ ] basic AI
+	[ ] texture and animation
+[ ] background
+	[ ] render it
+	[ ] move it according to player/camera position

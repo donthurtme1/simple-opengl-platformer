@@ -149,6 +149,8 @@ int init_graphics() {
 	stbi_image_free(tex_data);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	tex_data = stbi_load(
@@ -161,6 +163,8 @@ int init_graphics() {
 	stbi_image_free(tex_data);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	/* Create and initialise uniform buffers */
@@ -184,6 +188,8 @@ int init_graphics() {
 		{ 1.0f, -3.0f, 6, 1, 1 },
 		{ -6.0f, -1.0f, 1, 1, 2 },
 		{ -6.0f, -6.0f, 1, 5, 3 },
+		{ -3.0f, -3.0f, 1, 1, 2 },
+		{ -3.0f, -6.0f, 1, 3, 3 },
 	};
 	glBindBufferBase(GL_UNIFORM_BUFFER, LEVEL_UBUF_IDX,
 			gl.uniform_buffer[LEVEL_UBUF_IDX]);
