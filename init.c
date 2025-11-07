@@ -116,10 +116,14 @@ int init_graphics() {
 	glClearColor(0.4f, 0.73f, 0.8f, 1.0f);
 	glLineWidth(2.0f);
 	glCullFace(GL_BACK);
-	glDisable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_SCISSOR_TEST);
 	glDisable(GL_STENCIL_TEST);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	/* Window size */
 	int w, h;
