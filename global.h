@@ -33,6 +33,7 @@ extern struct {
 	int pos_x, pos_y;
 	int vel_x, vel_y;
 	int accel_x, accel_y;
+	int anim;
 	int anim_frame; /* Number from 0 - 3, only 4 frames */
 
 	enum PlayerInput {

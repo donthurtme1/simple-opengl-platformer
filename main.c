@@ -18,6 +18,7 @@ int main(void) {
 		write(1, "slag\n", 5);
 
 	/* Main loop */
+	unsigned int frame_timer = 0;
 	struct timespec monotime;
 	clock_gettime(CLOCK_MONOTONIC, &monotime);
 	while (1) {
@@ -53,12 +54,18 @@ int main(void) {
 		}
 
 		/* Game update */
+		frame_timer++;
 		update_player();
 
 		glNamedBufferData(gl.uniform_buffer[PLAYER_UBUF_IDX],
 				sizeof(player), &player, GL_STATIC_DRAW);
 		glNamedBufferData(gl.uniform_buffer[VIEW_UBUF_IDX],
 				sizeof(view), &view, GL_STATIC_DRAW);
+
+		if (frame_timer % 10 == 0) {
+			player.anim_frame += 1;
+			player.anim_frame %= 4;
+		}
 
 		/* Render */
 		int w, h;

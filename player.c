@@ -54,4 +54,8 @@ void update_player() {
 	player.vel_y = player.y_input * 20;
 	player.pos_x += player.vel_x;
 	player.pos_y += player.vel_y;
+	if (player.x_input != 0)
+		player.anim = 1;
+	else
+		player.anim = 0;
 }

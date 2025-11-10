@@ -1,5 +1,6 @@
 /* Sprite vertex shader */
 #version 460
+#extension GL_EXT_gpu_shader4 : enable
 
 vec2 anim_frames[3] = {
 	vec2(0, 0),		// stand
@@ -17,7 +18,7 @@ layout(binding=0) uniform Player {
 	int pos_x, pos_y;
 	int vel_x, vel_y;
 	int accel_x, accel_y;
-	int anim_frame; /* Number from 0 - 3, only 4 frames */
+	int anim, anim_frame; /* Number from 0 - 3, only 4 frames */
 };
 
 layout(binding=1) uniform View {
@@ -40,7 +41,12 @@ void main() {
 		vec2(1, 0),
 	};
 	out_texcoord = tex_coords[gl_VertexID];
-	out_texoffs = vec2(0.25f * anim_frame, 0);
+	if (anim == 1) {
+		out_texoffs = vec2(0.25f *
+				((anim_frame & 1) + ((anim_frame & 1) * (anim_frame / 2))), 0);
+	} else {
+		out_texoffs = vec2(0, 0);
+	}
 
 	gl_Position = vec4(
 			(in_pos.x / 8) + (float(pos_x) / (8 * 16 * 16)),
