@@ -27,13 +27,6 @@ layout(binding=1) uniform View {
 };
 
 void main() {
-	vec2 varray[4] = {
-		vec2(0, 0),
-		vec2(1, 0),
-		vec2(0, 1),
-		vec2(1, 1),
-	};
-
 	vec2 tex_coords[4] = {
 		vec2(0, 1),
 		vec2(1, 1),
@@ -51,6 +44,6 @@ void main() {
 	gl_Position = vec4(
 			(in_pos.x / 8) + (float(pos_x) / (8 * 16 * 16)),
 			(in_pos.y / 8) + (float(pos_y) / (8 * 16 * 16)),
-			0, 1);
+			-0.5f, 1);
 	gl_Position.x *= (float(height) / width);
 }

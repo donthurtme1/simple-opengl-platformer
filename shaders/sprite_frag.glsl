@@ -10,5 +10,8 @@ uniform sampler2D in_spriteatlas;
 
 void main() {
 	vec2 coord = in_texoffs + (vec2(0.25f, 0.25f) * fract(in_texcoord));
-	out_colour = texture(in_spriteatlas, coord);
+	vec4 tex_colour = texture(in_spriteatlas, coord); 
+	if (tex_colour.a == 0)
+		discard;
+	out_colour = tex_colour;
 }
