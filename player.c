@@ -11,10 +11,13 @@ void player_input(enum PlayerInput key, bool key_down) {
 				else 
 					player.y_input = -1;
 			} else {
-				if (key == INKEY_LEFT)
+				if (key == INKEY_LEFT) {
 					player.x_input = -1;
-				else
+					player.is_facing_left = true;
+				} else {
 					player.x_input = 1;
+					player.is_facing_left = false;
+				}
 			}
 		} else {
 			player.key_bitmask &= ~key;
@@ -24,28 +27,27 @@ void player_input(enum PlayerInput key, bool key_down) {
 				else
 					player.y_input = 0;
 			} else if (key == INKEY_LEFT) {
-				if (player.key_bitmask & INKEY_RIGHT)
+				if (player.key_bitmask & INKEY_RIGHT) {
 					player.x_input = 1;
-				else
+					player.is_facing_left = false;
+				} else {
 					player.x_input = 0;
+				}
 			} else if (key == INKEY_DOWN) {
 				if (player.key_bitmask & INKEY_UP)
 					player.y_input = 1;
 				else
 					player.y_input = 0;
 			} else if (key == INKEY_RIGHT) {
-				if (player.key_bitmask & INKEY_LEFT)
+				if (player.key_bitmask & INKEY_LEFT) {
 					player.x_input = -1;
-				else
+					player.is_facing_left = true;
+				} else {
 					player.x_input = 0;
+				}
 			}
 		}
 	}
-}
-
-void move_player(int x, int y) {
-	player.vel_x = x * 2;
-	player.vel_y = y * 2;
 }
 
 /* Called every frame, update player position, state, etc. */
@@ -55,7 +57,7 @@ void update_player() {
 	player.pos_x += player.vel_x;
 	player.pos_y += player.vel_y;
 	if (player.x_input != 0)
-		player.anim = 1;
+		player.anim_id = 1;
 	else
-		player.anim = 0;
+		player.anim_id = 0;
 }

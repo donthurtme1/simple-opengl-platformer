@@ -18,7 +18,8 @@ layout(binding=0) uniform Player {
 	int pos_x, pos_y;
 	int vel_x, vel_y;
 	int accel_x, accel_y;
-	int anim, anim_frame; /* Number from 0 - 3, only 4 frames */
+	int anim_id, anim_frame; /* Number from 0 - 3, only 4 frames */
+	int is_facing_left;
 };
 
 layout(binding=1) uniform View {
@@ -33,8 +34,9 @@ void main() {
 		vec2(0, 0),
 		vec2(1, 0),
 	};
-	out_texcoord = tex_coords[gl_VertexID];
-	if (anim == 1) {
+	out_texcoord.x = float(int(tex_coords[gl_VertexID].x) ^ is_facing_left);
+	out_texcoord.y = tex_coords[gl_VertexID].y;
+	if (anim_id == 1) {
 		out_texoffs = vec2(0.25f *
 				((anim_frame & 1) + ((anim_frame & 1) * (anim_frame / 2))), 0);
 	} else {

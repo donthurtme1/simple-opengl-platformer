@@ -8,7 +8,6 @@
 #include "global.h"
 
 extern int init_all(void);
-extern void move_player(int x, int y);
 extern void update_player(void);
 extern void player_input(enum PlayerInput key, bool key_down);
 
