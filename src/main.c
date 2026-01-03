@@ -8,7 +8,7 @@
 #include "global.h"
 
 extern int init_all(void);
-extern void update_player(void);
+extern void update_player(unsigned int frame_count);
 extern void player_input(enum PlayerInput key, bool key_down);
 
 int main(void) {
@@ -36,6 +36,8 @@ int main(void) {
 								 break;
 					case SDLK_F: player_input(INKEY_RIGHT, 1);
 								 break;
+					case SDLK_K: player_input(INKEY_JUMP, 1);
+								 break;
 				}
 			}
 			else if (event.type == SDL_EVENT_KEY_UP) {
@@ -48,23 +50,20 @@ int main(void) {
 								 break;
 					case SDLK_F: player_input(INKEY_RIGHT, 0);
 								 break;
+					case SDLK_K: player_input(INKEY_JUMP, 0);
+								 break;
 				}
 			}
 		}
 
 		/* Game update */
 		frame_timer++;
-		update_player();
+		update_player(frame_timer);
 
 		glNamedBufferData(gl.uniform_buffer[PLAYER_UBUF_IDX],
 				sizeof(player), &player, GL_STATIC_DRAW);
 		glNamedBufferData(gl.uniform_buffer[VIEW_UBUF_IDX],
 				sizeof(view), &view, GL_STATIC_DRAW);
-
-		if (frame_timer % 10 == 0) {
-			player.anim_frame += 1;
-			player.anim_frame %= 4;
-		}
 
 		/* Render */
 		int w, h;

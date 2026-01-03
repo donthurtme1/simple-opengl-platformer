@@ -183,23 +183,6 @@ int init_graphics() {
 	glNamedBufferData(gl.uniform_buffer[VIEW_UBUF_IDX],
 			sizeof(view), &view, GL_STATIC_DRAW);
 
-	struct {
-		float xpos, ypos;
-		int rectw, recth;
-		int tileid;
-	} __attribute__((aligned(8))) level_data[] = {
-		{ -15.0f, -8.0f, 30, 2, 0 },
-		{ 1.0f, -3.0f, 6, 1, 1 },
-		{ -6.0f, -1.0f, 1, 1, 2 },
-		{ -6.0f, -6.0f, 1, 5, 3 },
-		{ -3.0f, -3.0f, 1, 1, 2 },
-		{ -3.0f, -6.0f, 1, 3, 3 },
-	};
-	glBindBufferBase(GL_UNIFORM_BUFFER, LEVEL_UBUF_IDX,
-			gl.uniform_buffer[LEVEL_UBUF_IDX]);
-	glNamedBufferData(gl.uniform_buffer[LEVEL_UBUF_IDX],
-			sizeof(level_data), level_data, GL_DYNAMIC_DRAW);
-
 
 	/* Create and initialise vertex array */
 	float vdata[8] = {
@@ -219,12 +202,36 @@ int init_graphics() {
 	return 0;
 }
 
+int init_level() {
+	/* Load level data */
+	level_data[0] = (struct terrain_rect){-15, -8, 30, 2, TILE_GROUND };
+	level_data[1] = (struct terrain_rect){  1, -3,  6, 1, TILE_BRICKS };
+	level_data[2] = (struct terrain_rect){ -6, -1,  1, 1, TILE_SHROOM_HEAD };
+	level_data[3] = (struct terrain_rect){ -6, -6,  1, 5, TILE_SHROOM_STALK };
+	level_data[4] = (struct terrain_rect){ -3, -3,  1, 1, TILE_SHROOM_HEAD };
+	level_data[5] = (struct terrain_rect){ -3, -6,  1, 3, TILE_SHROOM_STALK };
+	level_data[6].tileid = TILE_NONE;
+
+	glBindBufferBase(GL_UNIFORM_BUFFER, LEVEL_UBUF_IDX,
+			gl.uniform_buffer[LEVEL_UBUF_IDX]);
+	glNamedBufferData(gl.uniform_buffer[LEVEL_UBUF_IDX],
+			6 * sizeof(level_data[0]), level_data, GL_DYNAMIC_DRAW);
+
+	return 0;
+}
+
 /* Initialise all subsystems */
 int init_all() {
 	int res;
 	res = init_graphics();
 	if (res == -1) {
 		fprintf(stderr, "Failed to initialise graphics\n");
+		return -1;
+	}
+
+	res = init_level();
+	if (res == -1) {
+		fprintf(stderr, "Failed to initialise level data\n");
 		return -1;
 	}
 

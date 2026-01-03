@@ -6,17 +6,17 @@ END GOAL
  - single background layer
 
 TODO
-[ ] player
+[x] player
 	[x] render player
 	[x] move player
-	[ ] player texture and animation
+	[x] player texture and animation
 [ ] terrain
 	[x] draw terrain
-	[ ] player-terrain collision
+	[x] player-terrain collision
 	[ ] load terrain
 [ ] controls
 	[ ] add player physics
-	[ ] add jump
+	[x] add jump
 [ ] enemy
 	[ ] render enemy
 	[ ] deal damage to player

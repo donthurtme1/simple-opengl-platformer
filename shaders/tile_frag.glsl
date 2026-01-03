@@ -1,8 +1,8 @@
 /* Tile fragment shader */
 #version 460
 
-layout(location=1) in vec2 in_texcoord;
-layout(location=2) in vec2 in_texoffs;
+layout(location=0) in vec2 in_texcoord;
+layout(location=1) in vec2 in_texoffs;
 
 out vec4 out_colour;
 
