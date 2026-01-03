@@ -69,13 +69,6 @@ void update_player(unsigned int frame_count) {
 
 	player.pos.x += player.vel.x;
 	player.pos.y += player.vel.y;
-	/* Vertical collision */
-	//if (player.pos.y + player.vel.y < -1536) {
-	//	player.pos.y = -1536;
-	//	player.vel.y = 0;
-	//} else {
-	//	player.pos.y += player.vel.y;
-	//}
 
 	/* TODO: order of blocks in level_data could effect
 	 * how collision is handled */
@@ -97,9 +90,27 @@ void update_player(unsigned int frame_count) {
 		/* Don't collide if moving out of collision.
 		 * Avoids trapping player in collision and also makes jumping
 		 * work (touching the floor would otherwise count as colliding) */
-		if (side == FACE_TOP && player.vel.y < 0) {
-			player.pos.y = intersect.y;
-			player.vel.y = 0;
+		switch (side) {
+			case FACE_TOP:
+				if (player.vel.y < 0) {
+					player.pos.y = intersect.y;
+					player.vel.y = 0;
+				} break;
+			case FACE_BOTTOM:
+				if (player.vel.y > 0) {
+					player.pos.y = intersect.y;
+					player.vel.y = 0;
+				} break;
+			case FACE_LEFT:
+				if (player.vel.x < 0) {
+					player.pos.x = intersect.x;
+					player.vel.x = 0;
+				} break;
+			case FACE_RIGHT:
+				if (player.vel.x > 0) {
+					player.pos.x = intersect.x;
+					player.vel.x = 0;
+				} break;
 		}
 	}
 

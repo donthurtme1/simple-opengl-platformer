@@ -2,7 +2,7 @@
 
 #define SIGN_BIT_32 (1 << 31)
 
-/* Returns 1 if clockwise, -1 if counterclockwise and 0 if collinear */
+/* Returns 1 if counterclockwise, -1 if clockwise and 0 if collinear */
 static inline int orientation(struct Vec2 v, struct Vec2 w) {
 	int weird_dot_product = (v.y * w.x) - (v.x * w.y);
 	if (weird_dot_product == 0)
@@ -32,8 +32,6 @@ int line_line_intersect
 	int ori3 = orientation(rs, sp);
 	int ori4 = orientation(rs, sq);
 
-	/* TODO: handle edge cases better.
-	 * possibly could be handled in calling function line_rect_intersect */
 	if (((ori1 == ori2) && ori1) || ((ori3 == ori4) && ori3))
 		return 0; /* Same orientation of points => no intersection */
 
@@ -59,19 +57,45 @@ int line_rect_intersect
  struct Rect rect,
  struct Vec2 *intersect, RectFace *side /* Return args */
  ) {
-	/* TODO: Find the sides of `rect` that must be checked
-	 * for intersection */
-	/* For now check top only */
-	struct Vec2 rect_p = {
-		.x = rect.x,
-		.y = rect.y + rect.h,
-	};
-	struct Vec2 rect_q = {
-		.x = rect.x + rect.w,
-		.y = rect.y + rect.h,
-	};
-	int ret = line_line_intersect(p, q, rect_p, rect_q, intersect);
-	*side = FACE_TOP;
+	int ret;
 
-	return ret;
+	/* Check vertical intersection */
+	if (p.y <= rect.y) { /* Line starts from below rect */
+		struct Vec2 rect_p = { rect.x         , rect.y };
+		struct Vec2 rect_q = { rect.x + rect.w, rect.y };
+		ret = line_line_intersect(p, q, rect_p, rect_q, intersect);
+		if (ret == 1) {
+			*side = FACE_BOTTOM;
+			return 1;
+		}
+	} else if (p.y >= rect.y + rect.h) { /* Starts above */
+		struct Vec2 rect_p = { rect.x         , rect.y + rect.h };
+		struct Vec2 rect_q = { rect.x + rect.w, rect.y + rect.h };
+		ret = line_line_intersect(p, q, rect_p, rect_q, intersect);
+		if (ret == 1) {
+			*side = FACE_TOP;
+			return 1;
+		}
+	}
+
+	/* Check horizontal intersection */
+	if (p.x <= rect.x) { /* Line starts from left of rect */
+		struct Vec2 rect_p = { rect.x, rect.y          };
+		struct Vec2 rect_q = { rect.x, rect.y + rect.h };
+		ret = line_line_intersect(p, q, rect_p, rect_q, intersect);
+		if (ret == 1) {
+			*side = FACE_LEFT;
+			return 1;
+		}
+	} else if (p.x >= rect.x + rect.w) { /* Starts right */
+		struct Vec2 rect_p = { rect.x + rect.w, rect.y          };
+		struct Vec2 rect_q = { rect.x + rect.w, rect.y + rect.h };
+		ret = line_line_intersect(p, q, rect_p, rect_q, intersect);
+		if (ret == 1) {
+			*side = FACE_RIGHT;
+			return 1;
+		}
+	}
+
+	return 0;
 }

@@ -84,6 +84,8 @@ int main(void) {
 		glBindTexture(GL_TEXTURE_2D, gl.tile_atlas);
 		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, 6);
 
+		/* TODO: draw debug info */
+
 		SDL_GL_SwapWindow(gl.window);
 
 		/* Frame advance */
